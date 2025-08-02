@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "173029568787",
+    "project_id": "itechone-8f53d",
+    "storage_bucket": "itechone-8f53d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173029568787:android:fb9fc7c5567f7e82dc6ae6",
+        "android_client_info": {
+          "package_name": "com.example.itechone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChPI-wjRtHM5t2DNKzHiZqPuwGN-q10b0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
