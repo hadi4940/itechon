@@ -10,6 +10,8 @@ import 'package:itechone/responsive/responsive_widget.dart';
 import 'package:itechone/widgets/main_button.dart';
 import 'package:itechone/pages/download_page/download_page.dart';
 
+import '../../services/firestore/firestore_methods.dart';
+
 class SingleSportPage extends StatelessWidget {
   final String imagePath;
   final String sportName;
@@ -83,9 +85,20 @@ class SingleSportPage extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+
+                    // 1. Check if the document actually exists in Firestore
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      // Trigger auto-creation if it doesn't exist
+                      _events.doc(sportName).set(FirestoreMethods.defaultWinnerSchema);
+
+                      return const Center(child: Text("Initializing match brackets..."));
                     }
+
+                    // 2. Cast data to a Map for safe access
+                    final data = snapshot.data!.data() as Map<String, dynamic>;
+
+                    // 3. Helper function to get values or return a default string
+                    String getVal(String key) => data.containsKey(key) ? data[key].toString() : "TBD";
                     return Padding(
                       padding: EdgeInsets.symmetric(
                           vertical: 35, horizontal: screenWidth * 0.1),
@@ -207,20 +220,14 @@ class SingleSportPage extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
+                                              Text("1st match \n${getVal('qf1')}", style: kSportTeamHeading),
+                                              Text("2nd match \n${getVal('qf2')}", style: kSportTeamHeading),
                                               Text(
-                                                "1st match \n${snapshot.data!['qf1']}",
+                                                "3rd match \n${getVal('qf3')}",
                                                 style: kSportTeamHeading,
                                               ),
                                               Text(
-                                                "2nd match \n${snapshot.data!['qf2']}",
-                                                style: kSportTeamHeading,
-                                              ),
-                                              Text(
-                                                "3rd match \n${snapshot.data!['qf3']}",
-                                                style: kSportTeamHeading,
-                                              ),
-                                              Text(
-                                                "4th match \n${snapshot.data!['qf4']}",
+                                                "4th match \n${getVal('qf4')}",
                                                 style: kSportTeamHeading,
                                               ),
                                             ],

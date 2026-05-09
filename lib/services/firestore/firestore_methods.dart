@@ -129,4 +129,24 @@ class FirestoreMethods {
     }
     return res;
   }
+
+  // Define the structure once
+  static Map<String, dynamic> defaultWinnerSchema = {
+    "qf1": "TBA",
+    "qf2": "TBA",
+    "qf3": "TBA",
+    "qf4": "TBA",
+    "sf1": "TBA",
+    "sf2": "TBA",
+    "f": "TBA",
+    "last_updated": FieldValue.serverTimestamp(),
+  };
+
+  // Function to automatically initialize a sport's winner document
+  Future<void> initializeSportWinners(String sportName) async {
+    final docRef = _firestore.collection('events_winner_update').doc(sportName);
+
+    // Use set with merge: true so you don't overwrite existing data
+    await docRef.set(defaultWinnerSchema, SetOptions(merge: true));
+  }
 }
